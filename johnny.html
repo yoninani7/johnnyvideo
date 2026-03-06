@@ -32,8 +32,9 @@
         nav {
             position: fixed; top: 0; width: 100%; height: 90px;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 5%; background: rgba(255, 255, 255, 0.85);
+            padding: 0 5%; background: rgba(255, 255, 255, 0.753);
             backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid var(--border);
+            
         }
         .logo { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; text-transform: uppercase; letter-spacing: -1px; }
         .nav-links a { text-decoration: none; color: inherit; font-size: 0.75rem; font-weight: 700; margin-left: 40px; text-transform: uppercase; letter-spacing: 2px; }
@@ -41,18 +42,68 @@
         section { position: relative; width: 100%; padding: 140px 8%; }
         .tag { color: var(--accent); font-weight: 800; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 4px; display: block; margin-bottom: 20px; }
         h2.sec-title { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1; margin-bottom: 60px; font-weight: 800; text-transform: uppercase; }
+ 
+         /* --- 1. THE HERO (REFINED VERTICAL STACK) --- */
+        .hero {
+            min-height: 120vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding-top: 120px;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #ffffff 0%, #fdfdfb 100%);
+        }
 
-        /* --- 1. HERO SLIDER --- */
-        .hero { height: 100vh; padding: 0; overflow: hidden; background: #000; }
-        .slide { position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 1.2s ease-in-out; }
-        .slide.active { opacity: 1; }
-        .slide-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); transform: scale(1.1); transition: transform 8s linear; }
-        .active .slide-img { transform: scale(1); }
-        .slide-content { position: absolute; top: 50%; left: 8%; transform: translateY(-50%); color: #fff; z-index: 10; }
-        .slide-content h1 { font-family: var(--font-display); font-size: 8vw; line-height: 0.8; text-transform: uppercase; font-weight: 800; }
-        .slider-dots { position: absolute; bottom: 40px; left: 8%; display: flex; gap: 15px; z-index: 100; }
-        .dot { width: 40px; height: 2px; background: rgba(255,255,255,0.3); cursor: pointer; }
-        .dot.active { background: #fff; }
+        .hero-header { text-align: center;   }
+        .hero-header p { font-size: 0.85rem; letter-spacing: 10px; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; font-weight: 600; }
+        .hero-header h1 { 
+            font-family: 'Bodoni Moda', serif; 
+            font-size: clamp(2.5rem, 6vw, 5.5rem); 
+            font-weight: 900; 
+            line-height: 1.1;
+            letter-spacing: -2px;
+        }
+
+        /* The Improved 3D Path */
+        .slider-container {
+            width: 100%;
+            height: 550px;
+            perspective: 3000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .slider {
+            position: absolute;
+            width: 260px;
+            height: 380px;
+            transform-style: preserve-3d;
+            animation: rotateSlider 45s linear infinite;
+        }
+
+        @keyframes rotateSlider {
+            from { transform: rotateX(-4deg) rotateY(0deg); }
+            to { transform: rotateX(-4deg) rotateY(360deg); }
+        }
+
+        .slider .item {
+            position: absolute;
+            inset: 0;
+            transform: rotateY(calc((var(--position) - 1) * (360 / 12) * 1deg)) translateZ(650px);
+        }
+
+        .slider .item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.12); /* Realistic Soft Shadow */
+            transition: 0.6s ease;
+        }
+        .slider .item:hover img { transform: scale(1.05); box-shadow: 0 25px 60px rgba(0,0,0,0.2); }
+
 
         /* --- 2. PHILOSOPHY --- */
         .philosophy { background: var(--soft-gray); display: grid; grid-template-columns: 1fr 1fr; gap: 100px; }
@@ -113,6 +164,7 @@
 
         @media (max-width: 1024px) {
             .philosophy, .journal-grid, .reels-grid, .tech-list, .bento-grid { grid-template-columns: 1fr; }
+             .hero-header h1 { font-size: 3.5rem; }
             .bento-grid { grid-template-rows: auto; }
             .bento-item { height: 300px; grid-area: auto !important; }
         }
@@ -120,8 +172,10 @@
 </head>
 <body>
 
-    <nav>
-        <div class="logo">JOHNNY PRODUCTION</div>
+    <nav  >
+        <div class="logo">
+            <img src="assets/logo.png" style="width: 100px;">
+        </div>
         <div class="nav-links">
             <a href="#work">Showcase</a>
             <a href="#tech">Equipment</a>
@@ -131,24 +185,31 @@
     </nav>
 
     <main>
-        <!-- 1. HERO SLIDER -->
-        <section class="hero">
-            <div class="slide active">
-                <img src="https://images.unsplash.com/photo-1492691523567-6170f0295dbd?auto=format&fit=crop&q=80&w=2000" class="slide-img">
-                <div class="slide-content"><h1>Visual<br>Poetry</h1></div>
+           <!-- 1. HERO SECTION -->
+    <section class="hero" id="home">
+        <div class="hero-header">
+            <p>Ethiopia's finest production</p>
+            <h1>JOHNNY   PRODUCTION</h1>
+        </div>
+
+        <div class="slider-container">
+            <div class="slider">
+                <!-- 12 Fine-Spaced Image Assets -->
+                <div class="item" style="--position: 1"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80" alt=""></div>
+                <div class="item" style="--position: 2"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80" alt=""></div>
+                <div class="item" style="--position: 3"><img src="https://images.unsplash.com/photo-1492691523567-6170c3605d60?auto=format&fit=crop&q=80" alt=""></div>
+                <div class="item" style="--position: 4"><img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80" alt=""></div>
+                <div class="item" style="--position: 5"><img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80" alt=""></div>
+                <div class="item" style="--position: 6"><img src="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&q=80" alt=""></div>
+                <div class="item" style="--position: 7"><img src="https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?auto=format&fit=crop&q=80" alt=""></div>
+                <div class="item" style="--position: 8"><img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80" alt=""></div>
+                <div class="item" style="--position: 9"><img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80" alt=""></div>
+                <div class="item" style="--position: 10"><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80" alt=""></div>
+                <div class="item" style="--position: 11"><img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&q=80" alt=""></div>
+                <div class="item" style="--position: 12"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80" alt=""></div>
             </div>
-            <div class="slide">
-                <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=2000" class="slide-img">
-                <div class="slide-content"><h1>Velocity<br>Mastery</h1></div>
-            </div>
-            <div class="slide">
-                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=2000" class="slide-img">
-                <div class="slide-content"><h1>Modern<br>Elegance</h1></div>
-            </div>
-            <div class="slider-dots">
-                <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
-            </div>
-        </section>
+        </div>
+    </section>
 
         <!-- 2. PHILOSOPHY -->
         <section class="philosophy">
@@ -258,24 +319,7 @@
         }
         requestAnimationFrame(raf);
 
-        // 2. Hero Slider
-        const slides = document.querySelectorAll('.slide');
-        const dots = document.querySelectorAll('.dot');
-        let current = 0;
-
-        function updateSlider(index) {
-            slides[current].classList.remove('active');
-            dots[current].classList.remove('active');
-            current = index;
-            slides[current].classList.add('active');
-            dots[current].classList.add('active');
-        }
-
-        setInterval(() => {
-            let next = (current + 1) % slides.length;
-            updateSlider(next);
-        }, 6000);
-
+       
         // 3. GSAP Reveals
         gsap.registerPlugin(ScrollTrigger);
         
