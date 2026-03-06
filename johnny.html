@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOHNNY PRODUCTION | The $100M Standard</title>
+    
+    <!-- Premium Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@200;400;600&family=Cormorant+Garamond:ital,wght@1,300;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #0d0d0d;
+            --accent: #d4af37;
+            --soft-gray: #f8f8f8;
+            --border: #eeeeee;
+            --font-display: 'Syne', sans-serif;
+            --font-main: 'Inter', sans-serif;
+            --font-serif: 'Cormorant Garamond', serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        body { background: var(--bg); color: var(--text); font-family: var(--font-main); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+        /* --- Global Elements --- */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 90px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid var(--border);
+        }
+        .logo { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; text-transform: uppercase; letter-spacing: -1px; }
+        .nav-links a { text-decoration: none; color: inherit; font-size: 0.75rem; font-weight: 700; margin-left: 40px; text-transform: uppercase; letter-spacing: 2px; }
+
+        section { position: relative; width: 100%; padding: 140px 8%; }
+        .tag { color: var(--accent); font-weight: 800; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 4px; display: block; margin-bottom: 20px; }
+        h2.sec-title { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1; margin-bottom: 60px; font-weight: 800; text-transform: uppercase; }
+
+        /* --- 1. HERO SLIDER --- */
+        .hero { height: 100vh; padding: 0; overflow: hidden; background: #000; }
+        .slide { position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 1.2s ease-in-out; }
+        .slide.active { opacity: 1; }
+        .slide-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); transform: scale(1.1); transition: transform 8s linear; }
+        .active .slide-img { transform: scale(1); }
+        .slide-content { position: absolute; top: 50%; left: 8%; transform: translateY(-50%); color: #fff; z-index: 10; }
+        .slide-content h1 { font-family: var(--font-display); font-size: 8vw; line-height: 0.8; text-transform: uppercase; font-weight: 800; }
+        .slider-dots { position: absolute; bottom: 40px; left: 8%; display: flex; gap: 15px; z-index: 100; }
+        .dot { width: 40px; height: 2px; background: rgba(255,255,255,0.3); cursor: pointer; }
+        .dot.active { background: #fff; }
+
+        /* --- 2. PHILOSOPHY --- */
+        .philosophy { background: var(--soft-gray); display: grid; grid-template-columns: 1fr 1fr; gap: 100px; }
+        .philosophy p { font-size: 1.5rem; line-height: 1.6; color: #444; }
+
+        /* --- 3. VIDEOGRAPHY SHOWREELS --- */
+        .reels-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .reel-item { position: relative; aspect-ratio: 9/16; overflow: hidden; background: #000; border-radius: 8px; }
+        .reel-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.5s; }
+        .reel-item:hover img { transform: scale(1.05); opacity: 1; }
+        .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; border: 1px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; pointer-events: none; }
+
+        /* --- 4. BENTO PHOTOGRAPHY GRID (MASSIVE) --- */
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 300px); gap: 20px; }
+        .bento-item { border-radius: 12px; overflow: hidden; position: relative; }
+        .bento-item img { width: 100%; height: 100%; object-fit: cover; transition: 1s; }
+        .bento-item:hover img { transform: scale(1.1); }
+        .bi-1 { grid-area: 1 / 1 / 3 / 3; }
+        .bi-2 { grid-area: 1 / 3 / 2 / 5; }
+        .bi-3 { grid-area: 2 / 3 / 4 / 4; }
+        .bi-4 { grid-area: 4 / 1 / 5 / 3; }
+        .bi-5 { grid-area: 3 / 4 / 5 / 5; }
+
+        /* --- 5. THE STUDIO TECH (GEAR) --- */
+        .tech { background: #000; color: #fff; }
+        .tech-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; margin-top: 40px; }
+        .tech-card h4 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 10px; color: var(--accent); }
+        .tech-card p { font-size: 0.9rem; opacity: 0.6; }
+
+        /* --- 6. PROCESS --- */
+        .process-row { display: flex; border-bottom: 1px solid var(--border); padding: 40px 0; align-items: center; }
+        .proc-num { font-family: var(--font-display); font-size: 3rem; margin-right: 50px; opacity: 0.2; }
+        .proc-text h3 { font-family: var(--font-display); font-size: 1.5rem; text-transform: uppercase; }
+
+        /* --- 7. AWARDS --- */
+        .awards-list { display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; }
+        .award { text-align: center; }
+        .award h3 { font-size: 3rem; font-family: var(--font-serif); }
+
+        /* --- 8. GLOBAL LOCATIONS --- */
+        .locations { background: var(--soft-gray); }
+        .loc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .loc-card { background: #fff; padding: 30px; border-radius: 8px; }
+
+        /* --- 9. JOURNAL (EDITORIAL) --- */
+        .journal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .article { border-bottom: 1px solid var(--border); padding-bottom: 30px; }
+        .article img { width: 100%; height: 300px; object-fit: cover; margin-bottom: 20px; border-radius: 4px; }
+
+        /* --- 10. CONTACT --- */
+        .contact { background: #000; color: #fff; text-align: center; }
+        .contact h2 { font-size: 8vw; }
+        .contact form { max-width: 600px; margin: 60px auto; display: grid; gap: 20px; }
+        input, textarea { background: #111; border: 1px solid #333; padding: 20px; color: #fff; font-family: var(--font-main); }
+        button { background: #fff; color: #000; padding: 20px; font-weight: 800; border: none; text-transform: uppercase; cursor: pointer; }
+
+        footer { padding: 60px 8%; background: #000; color: #fff; border-top: 1px solid #222; display: flex; justify-content: space-between; font-size: 0.8rem; opacity: 0.6; }
+
+        @media (max-width: 1024px) {
+            .philosophy, .journal-grid, .reels-grid, .tech-list, .bento-grid { grid-template-columns: 1fr; }
+            .bento-grid { grid-template-rows: auto; }
+            .bento-item { height: 300px; grid-area: auto !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">JOHNNY PRODUCTION</div>
+        <div class="nav-links">
+            <a href="#work">Showcase</a>
+            <a href="#tech">Equipment</a>
+            <a href="#journal">Journal</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- 1. HERO SLIDER -->
+        <section class="hero">
+            <div class="slide active">
+                <img src="https://images.unsplash.com/photo-1492691523567-6170f0295dbd?auto=format&fit=crop&q=80&w=2000" class="slide-img">
+                <div class="slide-content"><h1>Visual<br>Poetry</h1></div>
+            </div>
+            <div class="slide">
+                <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=2000" class="slide-img">
+                <div class="slide-content"><h1>Velocity<br>Mastery</h1></div>
+            </div>
+            <div class="slide">
+                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=2000" class="slide-img">
+                <div class="slide-content"><h1>Modern<br>Elegance</h1></div>
+            </div>
+            <div class="slider-dots">
+                <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+        </section>
+
+        <!-- 2. PHILOSOPHY -->
+        <section class="philosophy">
+            <div><span class="tag">Philosophy</span><h2 class="sec-title">We craft the<br>unforgettable.</h2></div>
+            <div><p>Johnny Production is a boutique house focused on the synergy between technical precision and raw emotion. We don't just point cameras; we build worlds.</p></div>
+        </section>
+
+        <!-- 3. VIDEOGRAPHY SHOWREELS -->
+        <section id="work">
+            <span class="tag">Videography</span>
+            <h2 class="sec-title">The Showreels</h2>
+            <div class="reels-grid">
+                <div class="reel-item"><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=800"><div class="play-btn">▶</div></div>
+                <div class="reel-item"><img src="https://images.unsplash.com/photo-1512070679279-8988d32161be?auto=format&fit=crop&q=80&w=800"><div class="play-btn">▶</div></div>
+                <div class="reel-item"><img src="https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?auto=format&fit=crop&q=80&w=800"><div class="play-btn">▶</div></div>
+            </div>
+        </section>
+
+        <!-- 4. BENTO PHOTOGRAPHY GRID -->
+        <section>
+            <span class="tag">Photography</span>
+            <h2 class="sec-title">The Stills Gallery</h2>
+            <div class="bento-grid">
+                <div class="bento-item bi-1"><img src="https://images.unsplash.com/photo-1500462859194-8111aa3bbd30?q=80&w=1000"></div>
+                <div class="bento-item bi-2"><img src="https://images.unsplash.com/photo-1551464885-21348ccc8b67?q=80&w=1000"></div>
+                <div class="bento-item bi-3"><img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800"></div>
+                <div class="bento-item bi-4"><img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=1200"></div>
+                <div class="bento-item bi-5"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800"></div>
+            </div>
+        </section>
+
+        <!-- 5. TECH STACK -->
+        <section id="tech" class="tech">
+            <span class="tag">The Arsenal</span>
+            <h2 class="sec-title">Our Technology</h2>
+            <div class="tech-list">
+                <div class="tech-card"><h4>RED V-RAPTOR</h4><p>8K VV Dynamic Sensor for elite cinema capture.</p></div>
+                <div class="tech-card"><h4>ARRI ALEXA</h4><p>The industry standard for skin tones and highlights.</p></div>
+                <div class="tech-card"><h4>DJI INSPIRE 3</h4><p>Full-frame 8K aerial cinematography.</p></div>
+                <div class="tech-card"><h4>COOKE OPTICS</h4><p>Vintage character with modern precision.</p></div>
+            </div>
+        </section>
+
+        <!-- 6. PROCESS -->
+        <section>
+            <span class="tag">Workflow</span>
+            <h2 class="sec-title">The Path to Perfection</h2>
+            <div class="process-row"><div class="proc-num">01</div><div class="proc-text"><h3>Conceptualization</h3></div></div>
+            <div class="process-row"><div class="proc-num">02</div><div class="proc-text"><h3>The Capture</h3></div></div>
+            <div class="process-row"><div class="proc-num">03</div><div class="proc-text"><h3>Mastering</h3></div></div>
+        </section>
+
+        <!-- 7. AWARDS -->
+        <section>
+            <div class="awards-list">
+                <div class="award"><h3>14</h3><p>Cannes Lions</p></div>
+                <div class="award"><h3>09</h3><p>Emmy Awards</p></div>
+                <div class="award"><h3>22</h3><p>Vimeo Staff Picks</p></div>
+            </div>
+        </section>
+
+        <!-- 8. GLOBAL LOCATIONS -->
+        <section class="locations">
+            <span class="tag">Availability</span>
+            <h2 class="sec-title">Global Reach</h2>
+            <div class="loc-grid">
+                <div class="loc-card"><h4>Los Angeles</h4><p>Main HQ & Studio</p></div>
+                <div class="loc-card"><h4>London</h4><p>EU Operations</p></div>
+                <div class="loc-card"><h4>Tokyo</h4><p>APAC Creative Hub</p></div>
+                <div class="loc-card"><h4>Dubai</h4><p>MENA Logistics</p></div>
+            </div>
+        </section>
+
+        <!-- 9. JOURNAL -->
+        <section id="journal">
+            <h2 class="sec-title">The Journal</h2>
+            <div class="journal-grid">
+                <div class="article"><img src="https://images.unsplash.com/photo-1492691523567-6170f0295dbd?q=80&w=800"><h4>The Evolution of 8K Film</h4></div>
+                <div class="article"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=800"><h4>Light: The Final Frontier</h4></div>
+            </div>
+        </section>
+
+        <!-- 10. CONTACT -->
+        <section id="contact" class="contact">
+            <span class="tag">Inquiry</span>
+            <h2>Let's build.</h2>
+            <form>
+                <input type="text" placeholder="Your Name">
+                <input type="email" placeholder="Email Address">
+                <textarea rows="5" placeholder="Project Brief"></textarea>
+                <button type="submit">Send Inquiry</button>
+            </form>
+        </section>
+
+        <footer>
+            <div>© Johnny Production 2026. Built for the $100M Prize.</div>
+            <div>Privacy / Terms / Careers</div>
+        </footer>
+    </main>
+
+    <script>
+        // 1. Smooth Scroll (Lenis)
+        const lenis = new Lenis();
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // 2. Hero Slider
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let current = 0;
+
+        function updateSlider(index) {
+            slides[current].classList.remove('active');
+            dots[current].classList.remove('active');
+            current = index;
+            slides[current].classList.add('active');
+            dots[current].classList.add('active');
+        }
+
+        setInterval(() => {
+            let next = (current + 1) % slides.length;
+            updateSlider(next);
+        }, 6000);
+
+        // 3. GSAP Reveals
+        gsap.registerPlugin(ScrollTrigger);
+        
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section, {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                }
+            });
+        });
+
+        // 4. Parallax Bento Images
+        gsap.utils.toArray('.bento-item img').forEach(img => {
+            gsap.to(img, {
+                y: -40,
+                scrollTrigger: {
+                    trigger: img,
+                    scrub: true
+                }
+            });
+        });
+    </script>
+</body>
+</html>
