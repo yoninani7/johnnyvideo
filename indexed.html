@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOHNNY PRODUCTION | The $100M Standard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=Syne:wght@400;700;800&family=DM+Sans:wght@200;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/SplitText.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #060606;
+            --bg2: #0c0c0c;
+            --white: #f0ede8;
+            --gold: #c9a84c;
+            --gold2: #e8c96a;
+            --gold3: #a07830;
+            --gold-grad: linear-gradient(135deg, #a07830 0%, #e8c96a 40%, #c9a84c 60%, #fff5c0 80%, #a07830 100%);
+            --gold-text: linear-gradient(110deg, #c9a84c, #fff5c0, #c9a84c);
+            --ff-display: 'Cormorant Garamond', serif;
+            --ff-head: 'Syne', sans-serif;
+            --ff-body: 'DM Sans', sans-serif;
+            --ff-impact: 'Bebas Neue', sans-serif;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: auto; }
+        body {
+            background: var(--bg); color: var(--white);
+            font-family: var(--ff-body); overflow-x: hidden;
+            -webkit-font-smoothing: antialiased; cursor: none;
+        }
+
+        /* ===================== CURSOR ===================== */
+        #jp-cursor {
+            position: fixed; z-index: 99999; pointer-events: none;
+            mix-blend-mode: exclusion; top: 0; left: 0;
+        }
+        #jp-cursor .c-dot {
+            width: 8px; height: 8px; background: var(--gold2);
+            border-radius: 50%; position: absolute;
+            transform: translate(-50%, -50%);
+        }
+        #jp-cursor .c-ring {
+            width: 44px; height: 44px;
+            border: 1px solid rgba(200,169,76,0.6);
+            border-radius: 50%; position: absolute;
+            transform: translate(-50%, -50%);
+            transition: width 0.35s ease, height 0.35s ease, border-color 0.35s ease;
+        }
+        body:has(a:hover, button:hover) #jp-cursor .c-ring,
+        body:has(.mag-btn:hover) #jp-cursor .c-ring {
+            width: 70px; height: 70px;
+            border-color: rgba(200,169,76,1);
+        }
+
+        /* ===================== PRELOADER ===================== */
+        #preloader {
+            position: fixed; inset: 0; z-index: 99990;
+            background: #000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; overflow: hidden;
+        }
+        #preloader .pre-logo {
+            font-family: var(--ff-impact); font-size: clamp(2rem, 6vw, 5rem);
+            letter-spacing: 0.3em;
+            background: var(--gold-grad); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+            opacity: 0; transform: scale(0.8);
+        }
+        #preloader .pre-bar-wrap {
+            width: 300px; height: 1px; background: #1a1a1a;
+            margin-top: 40px; overflow: hidden;
+        }
+        #preloader .pre-bar {
+            height: 100%; width: 0%; background: var(--gold-grad);
+        }
+        #preloader .pre-num {
+            font-family: var(--ff-impact); font-size: 1rem;
+            color: var(--gold); letter-spacing: 0.3em; margin-top: 20px;
+            opacity: 0.6;
+        }
+        #preloader .pre-tagline {
+            position: absolute; bottom: 60px;
+            font-family: var(--ff-body); font-size: 0.65rem;
+            letter-spacing: 6px; text-transform: uppercase;
+            color: rgba(200,169,76,0.4);
+        }
+
+        /* ===================== GRAIN ===================== */
+        .grain {
+            position: fixed; inset: 0; z-index: 9000; pointer-events: none;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            background-size: 200px 200px; animation: grainMove 0.5s steps(2) infinite;
+        }
+        @keyframes grainMove { 0%,100%{transform:translate(0,0)} 25%{transform:translate(-5px,3px)} 50%{transform:translate(4px,-4px)} 75%{transform:translate(-3px,5px)} }
+
+        /* ===================== SCROLLBAR ===================== */
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--gold3); }
+
+        /* ===================== NAV ===================== */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 8000;
+            height: 80px; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 6%; border-bottom: 1px solid rgba(201,168,76,0.08);
+            background: rgba(6,6,6,0.85); backdrop-filter: blur(24px);
+        }
+        .nav-logo {
+            font-family: var(--ff-impact); font-size: 1.4rem; letter-spacing: 0.25em;
+            background: var(--gold-text); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+            background-size: 200%;
+        }
+        .nav-links { display: flex; gap: 50px; }
+        .nav-links a {
+            font-family: var(--ff-body); font-size: 0.65rem; font-weight: 500;
+            text-transform: uppercase; letter-spacing: 3px;
+            color: rgba(240,237,232,0.55); text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--gold2); }
+        .nav-cta {
+            font-family: var(--ff-head); font-size: 0.65rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 3px;
+            padding: 13px 30px; border-radius: 2px;
+            background: transparent; border: 1px solid rgba(201,168,76,0.5);
+            color: var(--gold2); text-decoration: none;
+            transition: all 0.4s ease; position: relative; overflow: hidden;
+        }
+        .nav-cta::before {
+            content: ''; position: absolute; inset: 0;
+            background: var(--gold-grad); transform: translateX(-110%);
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .nav-cta:hover { color: #000; }
+        .nav-cta:hover::before { transform: translateX(0); }
+        .nav-cta span { position: relative; z-index: 1; }
+
+        /* ===================== HERO ===================== */
+        .hero {
+            height: 100vh; min-height: 700px; position: relative;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.07) 0%, transparent 60%),
+                        radial-gradient(ellipse at 100% 100%, rgba(201,168,76,0.04) 0%, transparent 50%),
+                        #060606;
+        }
+        .hero-lines {
+            position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+        }
+        .hero-lines::before {
+            content: ''; position: absolute;
+            width: 1px; height: 100%;
+            left: 20%; top: 0;
+            background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.12), transparent);
+        }
+        .hero-lines::after {
+            content: ''; position: absolute;
+            width: 1px; height: 100%;
+            right: 20%; top: 0;
+            background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.12), transparent);
+        }
+        .hero-eyebrow {
+            font-family: var(--ff-body); font-size: 0.6rem; font-weight: 400;
+            text-transform: uppercase; letter-spacing: 10px;
+            color: var(--gold3); margin-bottom: 28px;
+            display: flex; align-items: center; gap: 20px;
+            opacity: 0;
+        }
+        .hero-eyebrow::before, .hero-eyebrow::after {
+            content: ''; display: block; width: 40px; height: 1px;
+            background: var(--gold3);
+        }
+        .hero-headline {
+            font-family: var(--ff-display); font-weight: 300;
+            font-size: clamp(4.5rem, 13vw, 11rem); line-height: 0.88;
+            letter-spacing: -0.02em; overflow: hidden;
+        }
+        .hero-headline em {
+            display: block; font-style: italic;
+            background: var(--gold-grad); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+            background-size: 300%; animation: goldShimmer 4s linear infinite;
+        }
+        @keyframes goldShimmer { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
+        .hero-headline .solid { display: block; color: var(--white); }
+        .h-line { overflow: hidden; display: block; }
+        .h-inner { display: block; transform: translateY(110%); }
+
+        .hero-sub {
+            margin-top: 40px; font-family: var(--ff-body); font-weight: 200;
+            font-size: 1rem; letter-spacing: 0.05em; opacity: 0;
+            color: rgba(240,237,232,0.5); max-width: 500px;
+            line-height: 1.7;
+        }
+        .hero-ctas { margin-top: 60px; display: flex; gap: 24px; opacity: 0; }
+        .btn-primary {
+            font-family: var(--ff-head); font-size: 0.65rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 4px;
+            padding: 18px 46px; background: var(--gold-grad);
+            color: #000; text-decoration: none; border-radius: 2px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 40px rgba(201,168,76,0.15);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 50px rgba(201,168,76,0.3); }
+        .btn-ghost {
+            font-family: var(--ff-head); font-size: 0.65rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 4px;
+            padding: 18px 46px; background: transparent;
+            color: var(--gold); text-decoration: none; border-radius: 2px;
+            border: 1px solid rgba(201,168,76,0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-ghost:hover { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+
+        .hero-scroll {
+            position: absolute; bottom: 40px; left: 50%;
+            transform: translateX(-50%); display: flex; flex-direction: column;
+            align-items: center; gap: 12px; opacity: 0;
+        }
+        .hero-scroll span {
+            font-size: 0.55rem; letter-spacing: 5px; text-transform: uppercase;
+            color: rgba(201,168,76,0.5);
+        }
+        .scroll-line {
+            width: 1px; height: 60px; background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: scrollPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes scrollPulse { 0%,100%{opacity:0.4; transform:scaleY(1)} 50%{opacity:1; transform:scaleY(1.1)} }
+
+        .hero-year {
+            position: absolute; right: 6%; bottom: 44px;
+            font-family: var(--ff-impact); font-size: 0.75rem;
+            letter-spacing: 4px; color: rgba(201,168,76,0.25);
+        }
+
+        /* ===================== AWARD TICKER ===================== */
+        .ticker-section {
+            border-top: 1px solid rgba(201,168,76,0.1);
+            border-bottom: 1px solid rgba(201,168,76,0.1);
+            background: var(--bg2); padding: 20px 0; overflow: hidden;
+        }
+        .ticker-track {
+            display: flex; gap: 80px; width: fit-content;
+            animation: tickerMove 30s linear infinite;
+        }
+        @keyframes tickerMove { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+        .ticker-item {
+            white-space: nowrap; font-family: var(--ff-body); font-size: 0.6rem;
+            letter-spacing: 5px; text-transform: uppercase;
+            color: rgba(201,168,76,0.5); display: flex; align-items: center; gap: 30px;
+        }
+        .ticker-item .ti-dot {
+            width: 4px; height: 4px; border-radius: 50%; background: var(--gold);
+        }
+
+        /* ===================== STATS ===================== */
+        .stats-section {
+            padding: 120px 6%; display: grid;
+            grid-template-columns: repeat(4, 1fr); gap: 1px;
+            background: rgba(201,168,76,0.08);
+            border-top: 1px solid rgba(201,168,76,0.1);
+            border-bottom: 1px solid rgba(201,168,76,0.1);
+        }
+        .stat-cell {
+            background: var(--bg); padding: 60px 40px;
+            display: flex; flex-direction: column; gap: 12px;
+            position: relative; overflow: hidden;
+        }
+        .stat-cell::before {
+            content: ''; position: absolute;
+            inset: 0; background: radial-gradient(circle at 0% 100%, rgba(201,168,76,0.06), transparent 60%);
+        }
+        .stat-num {
+            font-family: var(--ff-display); font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 600; line-height: 1;
+            background: var(--gold-grad); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .stat-label {
+            font-family: var(--ff-body); font-size: 0.6rem;
+            font-weight: 400; text-transform: uppercase; letter-spacing: 5px;
+            color: rgba(240,237,232,0.35);
+        }
+        .stat-desc {
+            font-size: 0.8rem; color: rgba(240,237,232,0.45);
+            line-height: 1.6; margin-top: 8px; font-weight: 200;
+        }
+
+        /* ===================== SECTION SHARED ===================== */
+        .sec-tag {
+            display: inline-flex; align-items: center; gap: 16px;
+            font-family: var(--ff-body); font-size: 0.58rem; font-weight: 500;
+            text-transform: uppercase; letter-spacing: 6px; color: var(--gold3);
+            margin-bottom: 30px;
+        }
+        .sec-tag::before {
+            content: ''; display: block; width: 30px; height: 1px; background: var(--gold3);
+        }
+        h2.stitle {
+            font-family: var(--ff-display); font-weight: 300;
+            font-size: clamp(2.8rem, 7vw, 5.5rem); line-height: 1.0;
+            letter-spacing: -0.02em;
+        }
+        h2.stitle em { font-style: italic; color: var(--gold2); }
+
+        /* ===================== PHILOSOPHY ===================== */
+        .philosophy {
+            padding: 140px 6%; display: grid;
+            grid-template-columns: 1fr 1.1fr; gap: 100px; align-items: center;
+            background: var(--bg2);
+        }
+        .phil-img-wrap {
+            position: relative; height: 700px; overflow: hidden;
+        }
+        .phil-img-inner {
+            position: absolute; inset: 0; overflow: hidden;
+        }
+        .phil-img-inner img {
+            width: 100%; height: 115%; object-fit: cover;
+            filter: grayscale(0.3) contrast(1.05);
+            transform-origin: center center;
+        }
+        .phil-img-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(6,6,6,0.3), transparent);
+        }
+        .phil-accent {
+            position: absolute; bottom: -1px; left: -1px;
+            width: 120px; height: 120px;
+            border-left: 2px solid var(--gold); border-bottom: 2px solid var(--gold);
+        }
+        .phil-text { padding-right: 40px; }
+        .phil-text .big-quote {
+            font-family: var(--ff-display); font-size: clamp(1.3rem, 2.5vw, 2rem);
+            font-weight: 300; font-style: italic;
+            line-height: 1.5; color: rgba(240,237,232,0.9);
+            border-left: 2px solid var(--gold);
+            padding-left: 30px; margin: 40px 0;
+        }
+        .phil-text p {
+            font-size: 1rem; font-weight: 200; line-height: 1.85;
+            color: rgba(240,237,232,0.55);
+        }
+        .phil-awards {
+            display: flex; gap: 40px; margin-top: 60px; flex-wrap: wrap;
+        }
+        .pa-item {
+            display: flex; flex-direction: column; gap: 6px;
+        }
+        .pa-item strong {
+            font-family: var(--ff-head); font-size: 0.6rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 3px; color: var(--gold);
+        }
+        .pa-item span {
+            font-size: 0.75rem; color: rgba(240,237,232,0.4);
+        }
+
+        /* ===================== HORIZONTAL MARQUEE GALLERY ===================== */
+        .marquee-section {
+            padding: 0; overflow: hidden; background: #000;
+            position: relative;
+        }
+        .marquee-row {
+            display: flex; gap: 16px; padding: 8px 0;
+        }
+        .marquee-row.row1 { animation: marqueeLeft 35s linear infinite; width: fit-content; }
+        .marquee-row.row2 { animation: marqueeRight 45s linear infinite; width: fit-content; flex-direction: row-reverse; }
+        @keyframes marqueeLeft { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+        @keyframes marqueeRight { from{transform:translateX(-50%)} to{transform:translateX(0)} }
+        .marquee-img {
+            width: 380px; height: 250px; flex-shrink: 0; overflow: hidden;
+        }
+        .marquee-img img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: saturate(0.8); transition: filter 0.4s ease;
+        }
+        .marquee-img:hover img { filter: saturate(1.2); }
+
+        /* ===================== SERVICES ===================== */
+        .services { padding: 140px 6%; }
+        .services-layout {
+            display: grid; grid-template-columns: 0.8fr 1fr;
+            gap: 100px; align-items: start; margin-top: 80px;
+        }
+        .serv-left .serv-index {
+            font-family: var(--ff-impact); font-size: 0.75rem;
+            letter-spacing: 4px; color: rgba(201,168,76,0.3);
+            margin-bottom: 24px; display: block;
+        }
+        .serv-visual {
+            position: sticky; top: 120px; height: 600px; overflow: hidden;
+            border: 1px solid rgba(201,168,76,0.1);
+        }
+        .serv-visual img {
+            width: 100%; height: 100%; object-fit: cover;
+            opacity: 0.7; transition: opacity 0.6s ease;
+        }
+        .serv-list { display: flex; flex-direction: column; }
+        .serv-item {
+            padding: 44px 0; border-bottom: 1px solid rgba(240,237,232,0.07);
+            cursor: pointer; position: relative;
+            transition: padding-left 0.4s cubic-bezier(0.19,1,0.22,1);
+        }
+        .serv-item::before {
+            content: ''; position: absolute; left: 0; top: 50%;
+            transform: translateY(-50%) scaleY(0);
+            width: 2px; height: 50%; background: var(--gold);
+            transition: transform 0.4s cubic-bezier(0.19,1,0.22,1);
+        }
+        .serv-item:hover { padding-left: 24px; }
+        .serv-item:hover::before { transform: translateY(-50%) scaleY(1); }
+        .serv-item-num {
+            font-family: var(--ff-impact); font-size: 0.65rem;
+            letter-spacing: 4px; color: var(--gold3); margin-bottom: 12px;
+            display: block;
+        }
+        .serv-item h3 {
+            font-family: var(--ff-display); font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+            font-weight: 600; letter-spacing: -0.01em;
+            color: var(--white); margin-bottom: 12px;
+        }
+        .serv-item p {
+            font-size: 0.88rem; font-weight: 200;
+            color: rgba(240,237,232,0.45); line-height: 1.6;
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+        }
+        .serv-item:hover p { max-height: 100px; opacity: 1; }
+        .serv-tags {
+            display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px;
+        }
+        .stag {
+            font-size: 0.58rem; letter-spacing: 3px; text-transform: uppercase;
+            padding: 5px 12px; border: 1px solid rgba(201,168,76,0.2);
+            color: var(--gold3); border-radius: 1px;
+        }
+
+        /* ===================== REEL / VIDEO HERO ===================== */
+        .reel-section {
+            position: relative; height: 80vh; min-height: 500px;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; background: #000;
+        }
+        .reel-bg-img {
+            position: absolute; inset: 0;
+            background: url('https://images.unsplash.com/photo-1478720568477-152d9b164e26?q=80&w=1600') center/cover;
+            filter: brightness(0.25) saturate(0.5);
+        }
+        .reel-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to right, rgba(6,6,6,0.8), rgba(6,6,6,0.2), rgba(6,6,6,0.8));
+        }
+        .reel-content { position: relative; z-index: 2; text-align: center; }
+        .play-ring {
+            width: 110px; height: 110px; border-radius: 50%;
+            border: 1px solid rgba(201,168,76,0.6);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 40px; cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        .play-ring::before {
+            content: ''; position: absolute; inset: 8px;
+            border-radius: 50%; border: 1px solid rgba(201,168,76,0.2);
+            animation: ringPulse 2s ease-in-out infinite;
+        }
+        @keyframes ringPulse { 0%,100%{transform:scale(1);opacity:0.4} 50%{transform:scale(1.1);opacity:0.8} }
+        .play-ring:hover {
+            background: rgba(201,168,76,0.12); border-color: var(--gold2);
+            transform: scale(1.08);
+        }
+        .play-ring svg { width: 32px; height: 32px; fill: var(--gold2); margin-left: 5px; }
+        .reel-content h2 {
+            font-family: var(--ff-display); font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 300; font-style: italic; color: var(--white);
+        }
+        .reel-content p {
+            font-size: 0.75rem; letter-spacing: 6px; text-transform: uppercase;
+            color: rgba(201,168,76,0.6); margin-top: 16px;
+        }
+
+        /* ===================== WORK GRID ===================== */
+        .work-section { padding: 140px 6%; background: var(--bg2); }
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(3, 280px);
+            gap: 12px; margin-top: 80px;
+        }
+        .wg-item {
+            overflow: hidden; position: relative; cursor: pointer;
+        }
+        .wg-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1),
+                        filter 0.6s ease;
+            filter: saturate(0.7) brightness(0.85);
+        }
+        .wg-item:hover img { transform: scale(1.07); filter: saturate(1) brightness(1); }
+        .wg-item .wg-info {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 24px; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+            transform: translateY(10px); opacity: 0;
+            transition: all 0.4s ease;
+        }
+        .wg-item:hover .wg-info { transform: translateY(0); opacity: 1; }
+        .wg-info h4 {
+            font-family: var(--ff-display); font-size: 1.3rem;
+            font-weight: 600; margin-bottom: 4px;
+        }
+        .wg-info span {
+            font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase;
+            color: var(--gold3);
+        }
+        .wg-item:nth-child(1) { grid-column: 1/6; grid-row: 1/2; }
+        .wg-item:nth-child(2) { grid-column: 6/9; grid-row: 1/3; }
+        .wg-item:nth-child(3) { grid-column: 9/13; grid-row: 1/2; }
+        .wg-item:nth-child(4) { grid-column: 1/4; grid-row: 2/4; }
+        .wg-item:nth-child(5) { grid-column: 4/6; grid-row: 2/3; }
+        .wg-item:nth-child(6) { grid-column: 9/13; grid-row: 2/3; }
+        .wg-item:nth-child(7) { grid-column: 4/9; grid-row: 3/4; }
+        .wg-item:nth-child(8) { grid-column: 9/13; grid-row: 3/4; }
+
+        /* ===================== PROCESS ===================== */
+        .process { padding: 140px 6%; }
+        .process-grid {
+            display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 0; margin-top: 80px; position: relative;
+        }
+        .process-grid::before {
+            content: ''; position: absolute;
+            top: 40px; left: 12.5%; right: 12.5%;
+            height: 1px; background: linear-gradient(to right, transparent, rgba(201,168,76,0.3), transparent);
+        }
+        .proc-step {
+            padding: 0 30px; position: relative;
+            border-left: 1px solid rgba(240,237,232,0.06);
+        }
+        .proc-step:first-child { border-left: none; padding-left: 0; }
+        .proc-num {
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 1px solid rgba(201,168,76,0.25);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--ff-display); font-size: 1.8rem;
+            font-weight: 600; color: var(--gold);
+            margin-bottom: 36px; position: relative; background: var(--bg);
+        }
+        .proc-step h3 {
+            font-family: var(--ff-head); font-size: 1rem;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+            margin-bottom: 16px; color: var(--white);
+        }
+        .proc-step p {
+            font-size: 0.88rem; font-weight: 200;
+            color: rgba(240,237,232,0.45); line-height: 1.7;
+        }
+        .proc-line {
+            position: absolute; top: 40px; right: -30px;
+            width: 60px; height: 1px;
+            background: rgba(201,168,76,0.2);
+        }
+
+        /* ===================== TEAM ===================== */
+        .team { padding: 140px 6%; background: var(--bg2); }
+        .team-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 40px; margin-top: 80px;
+        }
+        .team-card {
+            position: relative; overflow: hidden; cursor: pointer;
+        }
+        .team-img {
+            height: 520px; overflow: hidden;
+        }
+        .team-img img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: grayscale(0.4) brightness(0.85);
+            transition: transform 0.8s cubic-bezier(0.19,1,0.22,1), filter 0.6s ease;
+        }
+        .team-card:hover .team-img img {
+            transform: scale(1.06); filter: grayscale(0) brightness(1);
+        }
+        .team-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(6,6,6,0.9) 0%, transparent 50%);
+        }
+        .team-info {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 32px;
+        }
+        .team-role {
+            font-family: var(--ff-body); font-size: 0.55rem;
+            letter-spacing: 5px; text-transform: uppercase;
+            color: var(--gold3); margin-bottom: 8px; display: block;
+        }
+        .team-name {
+            font-family: var(--ff-display); font-size: 1.8rem;
+            font-weight: 600; color: var(--white); margin-bottom: 0;
+        }
+        .team-bio {
+            font-size: 0.8rem; font-weight: 200; line-height: 1.6;
+            color: rgba(240,237,232,0.55);
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.5s ease, margin 0.5s ease;
+        }
+        .team-card:hover .team-bio { max-height: 100px; margin-top: 12px; }
+        .team-social {
+            display: flex; gap: 16px; margin-top: 0;
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.4s ease 0.1s, margin 0.4s ease;
+        }
+        .team-card:hover .team-social { max-height: 40px; margin-top: 16px; }
+        .team-social a {
+            font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--gold3); text-decoration: none; transition: color 0.3s;
+        }
+        .team-social a:hover { color: var(--gold2); }
+
+        /* ===================== TESTIMONIALS ===================== */
+        .testimonials { padding: 140px 6%; overflow: hidden; }
+        .testi-slider { position: relative; }
+        .testi-track {
+            display: flex; gap: 40px; margin-top: 80px;
+            transition: transform 0.8s cubic-bezier(0.19,1,0.22,1);
+        }
+        .testi-card {
+            min-width: calc(50% - 20px); padding: 60px;
+            border: 1px solid rgba(201,168,76,0.1);
+            position: relative; flex-shrink: 0;
+            background: rgba(201,168,76,0.02);
+        }
+        .testi-card::before {
+            content: '"'; font-family: var(--ff-display);
+            font-size: 8rem; color: rgba(201,168,76,0.08);
+            position: absolute; top: -20px; left: 40px;
+            line-height: 1; pointer-events: none;
+        }
+        .testi-text {
+            font-family: var(--ff-display); font-size: 1.35rem;
+            font-weight: 300; font-style: italic; line-height: 1.65;
+            color: rgba(240,237,232,0.85); margin-bottom: 40px;
+            position: relative; z-index: 1;
+        }
+        .testi-author { display: flex; align-items: center; gap: 20px; }
+        .testi-avatar {
+            width: 50px; height: 50px; border-radius: 50%; overflow: hidden;
+            border: 1px solid rgba(201,168,76,0.3);
+        }
+        .testi-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .testi-meta strong {
+            display: block; font-family: var(--ff-head); font-size: 0.75rem;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+        }
+        .testi-meta span {
+            font-size: 0.65rem; color: rgba(201,168,76,0.5); letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .testi-stars { color: var(--gold); font-size: 0.7rem; margin-bottom: 8px; }
+        .testi-nav {
+            display: flex; gap: 16px; margin-top: 40px;
+        }
+        .testi-btn {
+            width: 50px; height: 50px; border: 1px solid rgba(201,168,76,0.3);
+            background: transparent; color: var(--gold); font-size: 1.1rem;
+            cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .testi-btn:hover {
+            background: rgba(201,168,76,0.1); border-color: var(--gold);
+        }
+
+        /* ===================== CLIENTS LOGO BAR ===================== */
+        .clients-section {
+            padding: 80px 6%; border-top: 1px solid rgba(201,168,76,0.08);
+            border-bottom: 1px solid rgba(201,168,76,0.08);
+            background: var(--bg2);
+        }
+        .clients-title {
+            text-align: center; font-family: var(--ff-body); font-size: 0.6rem;
+            letter-spacing: 6px; text-transform: uppercase;
+            color: rgba(240,237,232,0.3); margin-bottom: 50px;
+        }
+        .clients-logos {
+            display: flex; gap: 60px; justify-content: center;
+            align-items: center; flex-wrap: wrap;
+        }
+        .cl-logo {
+            font-family: var(--ff-impact); font-size: 1.1rem;
+            letter-spacing: 4px; color: rgba(240,237,232,0.15);
+            transition: color 0.3s ease; cursor: default;
+        }
+        .cl-logo:hover { color: rgba(201,168,76,0.5); }
+
+        /* ===================== TECH ARSENAL ===================== */
+        .tech { padding: 140px 6%; }
+        .tech-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 0; margin-top: 80px;
+            border: 1px solid rgba(201,168,76,0.1);
+        }
+        .tech-cell {
+            padding: 50px; border-right: 1px solid rgba(201,168,76,0.1);
+            border-bottom: 1px solid rgba(201,168,76,0.1);
+            position: relative; overflow: hidden;
+            transition: background 0.4s ease;
+        }
+        .tech-cell:nth-child(even) { border-right: none; }
+        .tech-cell:nth-last-child(-n+2) { border-bottom: none; }
+        .tech-cell:hover { background: rgba(201,168,76,0.03); }
+        .tech-cell::after {
+            content: ''; position: absolute;
+            inset: 0; background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(201,168,76,0.06), transparent 60%);
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        .tech-cell:hover::after { opacity: 1; }
+        .tech-icon {
+            font-family: var(--ff-impact); font-size: 0.65rem;
+            letter-spacing: 4px; color: var(--gold3); margin-bottom: 20px; display: block;
+        }
+        .tech-cell h4 {
+            font-family: var(--ff-display); font-size: 1.8rem;
+            font-weight: 600; margin-bottom: 12px;
+        }
+        .tech-cell p {
+            font-size: 0.85rem; font-weight: 200;
+            color: rgba(240,237,232,0.45); line-height: 1.7;
+        }
+        .tech-spec {
+            display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px;
+        }
+        .ts { font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase;
+            padding: 4px 10px; background: rgba(201,168,76,0.07);
+            color: rgba(201,168,76,0.6); border-radius: 1px; }
+
+        /* ===================== FAQ ===================== */
+        .faq { padding: 140px 6%; background: var(--bg2); }
+        .faq-inner {
+            display: grid; grid-template-columns: 1fr 1.5fr;
+            gap: 100px; align-items: start;
+        }
+        .faq-left { position: sticky; top: 140px; }
+        .faq-left .big-num {
+            font-family: var(--ff-display); font-size: 8rem;
+            font-weight: 600; line-height: 1;
+            background: var(--gold-grad); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+            opacity: 0.2;
+        }
+        .faq-list { margin-top: 20px; }
+        .faq-item { border-bottom: 1px solid rgba(240,237,232,0.07); }
+        .faq-q {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 28px 0; cursor: pointer;
+            font-family: var(--ff-head); font-size: 0.85rem;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+            color: rgba(240,237,232,0.7); transition: color 0.3s ease;
+        }
+        .faq-q:hover { color: var(--white); }
+        .faq-q .faq-plus {
+            width: 28px; height: 28px; border: 1px solid rgba(201,168,76,0.3);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; color: var(--gold3); flex-shrink: 0;
+            transition: transform 0.4s ease, border-color 0.3s ease;
+        }
+        .faq-item.open .faq-plus { transform: rotate(45deg); border-color: var(--gold); }
+        .faq-a {
+            height: 0; overflow: hidden;
+            font-size: 0.9rem; font-weight: 200; line-height: 1.8;
+            color: rgba(240,237,232,0.45);
+        }
+
+        /* ===================== AWARDS ===================== */
+        .awards { padding: 140px 6%; }
+        .awards-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 30px; margin-top: 80px;
+        }
+        .award-card {
+            padding: 40px; border: 1px solid rgba(201,168,76,0.1);
+            position: relative; overflow: hidden;
+            transition: border-color 0.4s ease;
+        }
+        .award-card:hover { border-color: rgba(201,168,76,0.4); }
+        .award-year {
+            font-family: var(--ff-impact); font-size: 0.65rem;
+            letter-spacing: 5px; color: var(--gold3); margin-bottom: 20px;
+        }
+        .award-card h4 {
+            font-family: var(--ff-display); font-size: 1.4rem;
+            font-weight: 600; margin-bottom: 8px;
+        }
+        .award-card span {
+            font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+            color: rgba(240,237,232,0.35);
+        }
+        .award-card .award-badge {
+            position: absolute; top: 30px; right: 30px;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(201,168,76,0.1), transparent);
+            border: 1px solid rgba(201,168,76,0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* ===================== CONTACT ===================== */
+        .contact { padding: 140px 6%; background: var(--bg2); }
+        .contact-inner {
+            display: grid; grid-template-columns: 1fr 1.2fr;
+            gap: 100px; align-items: start;
+        }
+        .contact-info { padding-top: 10px; }
+        .contact-info p {
+            font-size: 1rem; font-weight: 200; line-height: 1.85;
+            color: rgba(240,237,232,0.5); margin: 30px 0 50px;
+        }
+        .contact-detail {
+            display: flex; flex-direction: column; gap: 28px;
+        }
+        .cd-item { display: flex; flex-direction: column; gap: 6px; }
+        .cd-label {
+            font-size: 0.55rem; letter-spacing: 5px; text-transform: uppercase;
+            color: var(--gold3);
+        }
+        .cd-val {
+            font-family: var(--ff-display); font-size: 1.2rem;
+            font-weight: 300; color: var(--white);
+        }
+        .contact-form { display: flex; flex-direction: column; gap: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-field { display: flex; flex-direction: column; gap: 10px; }
+        .form-field label {
+            font-size: 0.55rem; letter-spacing: 4px; text-transform: uppercase;
+            color: rgba(201,168,76,0.5);
+        }
+        .form-field input, .form-field textarea, .form-field select {
+            background: rgba(240,237,232,0.03);
+            border: 1px solid rgba(240,237,232,0.1);
+            padding: 16px 20px; color: var(--white);
+            font-family: var(--ff-body); font-size: 0.9rem; font-weight: 200;
+            outline: none; transition: border-color 0.3s ease;
+            border-radius: 1px; -webkit-appearance: none;
+        }
+        .form-field input:focus, .form-field textarea:focus, .form-field select:focus {
+            border-color: rgba(201,168,76,0.5);
+        }
+        .form-field textarea { resize: vertical; min-height: 140px; }
+        .form-field select option { background: #111; }
+        .form-submit {
+            padding: 20px; background: var(--gold-grad);
+            border: none; color: #000; font-family: var(--ff-head);
+            font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 4px; cursor: pointer; border-radius: 1px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 10px;
+        }
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(201,168,76,0.25);
+        }
+
+        /* ===================== FOOTER ===================== */
+        footer {
+            background: #000; padding: 80px 6% 40px;
+            border-top: 1px solid rgba(201,168,76,0.1);
+        }
+        .footer-top {
+            display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 60px; padding-bottom: 60px;
+            border-bottom: 1px solid rgba(240,237,232,0.06);
+        }
+        .footer-brand .f-logo {
+            font-family: var(--ff-impact); font-size: 1.8rem;
+            letter-spacing: 0.2em;
+            background: var(--gold-grad); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+            display: block; margin-bottom: 20px;
+        }
+        .footer-brand p {
+            font-size: 0.82rem; font-weight: 200; line-height: 1.7;
+            color: rgba(240,237,232,0.35); max-width: 280px;
+        }
+        .footer-col h5 {
+            font-family: var(--ff-head); font-size: 0.6rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 4px; color: var(--gold3);
+            margin-bottom: 28px;
+        }
+        .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+        .footer-col a {
+            font-size: 0.82rem; color: rgba(240,237,232,0.35);
+            text-decoration: none; transition: color 0.3s ease;
+            font-weight: 200;
+        }
+        .footer-col a:hover { color: var(--gold2); }
+        .footer-bottom {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 40px;
+        }
+        .footer-copy {
+            font-size: 0.65rem; color: rgba(240,237,232,0.2);
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+        .footer-socials { display: flex; gap: 24px; }
+        .footer-socials a {
+            font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase;
+            color: rgba(201,168,76,0.35); text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-socials a:hover { color: var(--gold2); }
+
+        /* ===================== MODAL ===================== */
+        #modal {
+            position: fixed; inset: 0; z-index: 99000;
+            background: rgba(0,0,0,0.96); display: none;
+            justify-content: center; align-items: center;
+            backdrop-filter: blur(20px);
+        }
+        #modal.active { display: flex; }
+        #modal img {
+            max-width: 90%; max-height: 90vh; object-fit: contain;
+            border: 1px solid rgba(201,168,76,0.2);
+        }
+        #modal .modal-close {
+            position: absolute; top: 40px; right: 50px;
+            font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase;
+            color: var(--gold3); cursor: pointer; transition: color 0.3s;
+        }
+        #modal .modal-close:hover { color: var(--gold2); }
+
+        /* ===================== PAGE TRANSITION ===================== */
+        .page-transition {
+            position: fixed; inset: 0; z-index: 99980;
+            background: var(--gold-grad); transform: scaleX(0);
+            transform-origin: left center; pointer-events: none;
+        }
+
+        /* ===================== SCROLL REVEAL ===================== */
+        .reveal { opacity: 0; transform: translateY(50px); }
+
+        /* ===================== RESPONSIVE ===================== */
+        @media (max-width: 1100px) {
+            .philosophy { grid-template-columns: 1fr; gap: 60px; }
+            .phil-img-wrap { height: 400px; }
+            .services-layout { grid-template-columns: 1fr; }
+            .serv-visual { display: none; }
+            .team-grid { grid-template-columns: 1fr 1fr; }
+            .contact-inner { grid-template-columns: 1fr; gap: 60px; }
+            .footer-top { grid-template-columns: 1fr 1fr; }
+            .testi-card { min-width: calc(90vw - 12%); }
+        }
+        @media (max-width: 768px) {
+            .stats-section { grid-template-columns: 1fr 1fr; }
+            .work-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .wg-item { grid-column: 1/-1 !important; grid-row: auto !important; height: 300px; }
+            .process-grid { grid-template-columns: 1fr 1fr; }
+            .team-grid { grid-template-columns: 1fr; }
+            .awards-grid { grid-template-columns: 1fr 1fr; }
+            .nav-links { display: none; }
+            * { cursor: auto !important; }
+            #jp-cursor { display: none; }
+            .footer-top { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .faq-inner { grid-template-columns: 1fr; }
+            .faq-left { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="jp-cursor">
+    <div class="c-dot"></div>
+    <div class="c-ring"></div>
+</div>
+
+<!-- GRAIN -->
+<div class="grain"></div>
+
+<!-- PAGE TRANSITION -->
+<div class="page-transition" id="page-trans"></div>
+
+<!-- PRELOADER -->
+<div id="preloader">
+    <div class="pre-logo">JOHNNY PRODUCTION</div>
+    <div class="pre-bar-wrap"><div class="pre-bar" id="pre-bar"></div></div>
+    <div class="pre-num" id="pre-num">0%</div>
+    <div class="pre-tagline">Ethiopia's Premium Standard · Est. 2009</div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+    <div class="nav-logo">JOHNNY PRODUCTION</div>
+    <div class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#services">Services</a>
+        <a href="#team">Team</a>
+        <a href="#contact">Contact</a>
+    </div>
+    <a href="#contact" class="nav-cta mag-btn"><span>Start Production</span></a>
+</nav>
+
+<!-- MODAL -->
+<div id="modal">
+    <div class="modal-close" id="modal-close">✕ Close</div>
+    <img src="" id="modal-img" alt="">
+</div>
+
+<main>
+
+<!-- ===== 1. HERO ===== -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-eyebrow" id="hero-eyebrow">Ethiopia's Premium Standard</div>
+    <h1 class="hero-headline">
+        <span class="h-line"><span class="h-inner solid">JOHNNY</span></span>
+        <span class="h-line"><span class="h-inner em" style="font-style:italic; background: var(--gold-grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; background-size:300%; animation:goldShimmer 4s linear infinite">PRODUCTION</span></span>
+    </h1>
+    <p class="hero-sub">We craft visual legacies that define<br>brands, cultures, and generations.</p>
+    <div class="hero-ctas">
+        <a href="#work" class="btn-primary mag-btn">View Our Work</a>
+        <a href="#contact" class="btn-ghost mag-btn">Book Production</a>
+    </div>
+    <div class="hero-scroll">
+        <div class="scroll-line"></div>
+        <span>Scroll</span>
+    </div>
+    <div class="hero-year">EST. 2009 · ADDIS ABABA</div>
+</section>
+
+<!-- ===== TICKER ===== -->
+<div class="ticker-section">
+    <div class="ticker-track" id="ticker">
+        <div class="ticker-item"><span class="ti-dot"></span>Cinematic Brilliance</div>
+        <div class="ticker-item"><span class="ti-dot"></span>Music Videos · TVC · Aerial</div>
+        <div class="ticker-item"><span class="ti-dot"></span>8K Resolution Capture</div>
+        <div class="ticker-item"><span class="ti-dot"></span>The $100M Standard</div>
+        <div class="ticker-item"><span class="ti-dot"></span>Addis Ababa · Dubai · Los Angeles</div>
+        <div class="ticker-item"><span class="ti-dot"></span>500+ Projects Delivered</div>
+        <div class="ticker-item"><span class="ti-dot"></span>Cinematic Brilliance</div>
+        <div class="ticker-item"><span class="ti-dot"></span>Music Videos · TVC · Aerial</div>
+        <div class="ticker-item"><span class="ti-dot"></span>8K Resolution Capture</div>
+        <div class="ticker-item"><span class="ti-dot"></span>The $100M Standard</div>
+        <div class="ticker-item"><span class="ti-dot"></span>Addis Ababa · Dubai · Los Angeles</div>
+        <div class="ticker-item"><span class="ti-dot"></span>500+ Projects Delivered</div>
+    </div>
+</div>
+
+<!-- ===== 2. STATS ===== -->
+<section class="stats-section">
+    <div class="stat-cell reveal">
+        <div class="stat-num" data-count="15">0</div>
+        <div class="stat-label">Years of Excellence</div>
+        <p class="stat-desc">A decade and a half of cinematic mastery in East Africa and beyond.</p>
+    </div>
+    <div class="stat-cell reveal">
+        <div class="stat-num" data-count="500">0</div>
+        <div class="stat-label">Projects Delivered</div>
+        <p class="stat-desc">From intimate short films to large-scale national campaigns.</p>
+    </div>
+    <div class="stat-cell reveal">
+        <div class="stat-num">8K</div>
+        <div class="stat-label">Max Resolution</div>
+        <p class="stat-desc">Equipped with the finest cinema-grade cameras money can buy.</p>
+    </div>
+    <div class="stat-cell reveal">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">Post-Production</div>
+        <p class="stat-desc">Our post house never sleeps. Your deadline is our obsession.</p>
+    </div>
+</section>
+
+<!-- ===== 3. PHILOSOPHY ===== -->
+<section class="philosophy" id="about">
+    <div class="phil-img-wrap reveal">
+        <div class="phil-img-inner">
+            <img src="https://images.unsplash.com/photo-1492691523567-6170c3605d60?q=80&w=1200" alt="Production">
+        </div>
+        <div class="phil-img-overlay"></div>
+        <div class="phil-accent"></div>
+    </div>
+    <div class="phil-text">
+        <span class="sec-tag">Vision</span>
+        <h2 class="stitle reveal">We don't shoot<br>moments. We<br><em>craft legacies.</em></h2>
+        <blockquote class="big-quote reveal">
+            "Every frame we create is a permanent mark on the visual identity of a nation."
+        </blockquote>
+        <p class="reveal">Johnny Production was born from a singular obsession: to bring $100M-level cinematic quality to every story told in East Africa — and to the world. We blend technical obsession with raw emotional intelligence, producing work that doesn't just look good. It feels inevitable.</p>
+        <div class="phil-awards reveal">
+            <div class="pa-item">
+                <strong>AMAA Nominee</strong>
+                <span>Best Cinematography 2022</span>
+            </div>
+            <div class="pa-item">
+                <strong>Africa Film Festival</strong>
+                <span>Best Commercial 2023</span>
+            </div>
+            <div class="pa-item">
+                <strong>Cannes Lions</strong>
+                <span>Shortlisted 2024</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 4. MARQUEE GALLERY ===== -->
+<section class="marquee-section">
+    <div class="marquee-row row1">
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1492691523567-6170c3605d60?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&w=600" alt=""></div>
+        <!-- duplicated for seamless loop -->
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1492691523567-6170c3605d60?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&w=600" alt=""></div>
+    </div>
+    <div class="marquee-row row2" style="margin-top:16px">
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=600" alt=""></div>
+        <div class="marquee-img"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600" alt=""></div>
+    </div>
+</section>
+
+<!-- ===== 5. SERVICES ===== -->
+<section class="services" id="services">
+    <span class="sec-tag">Expertise</span>
+    <h2 class="stitle reveal">What we<br><em>create</em></h2>
+    <div class="services-layout">
+        <div class="serv-left">
+            <div class="serv-visual reveal">
+                <img src="https://images.unsplash.com/photo-1492691523567-6170c3605d60?q=80&w=800" id="serv-img" alt="">
+            </div>
+        </div>
+        <div class="serv-list">
+            <div class="serv-item" data-img="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&w=800">
+                <span class="serv-item-num">01</span>
+                <h3>High-End TVC</h3>
+                <p>Brand commercials engineered to command attention and build equity. We handle concept to broadcast-ready master.</p>
+                <div class="serv-tags"><span class="stag">Broadcast</span><span class="stag">Brand</span><span class="stag">OOH</span></div>
+            </div>
+            <div class="serv-item" data-img="https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?q=80&w=800">
+                <span class="serv-item-num">02</span>
+                <h3>Music Videos</h3>
+                <p>Avant-garde visual storytelling that transforms sound into cinematic art. Concept, choreography, post — all in-house.</p>
+                <div class="serv-tags"><span class="stag">Narrative</span><span class="stag">Performance</span><span class="stag">VFX</span></div>
+            </div>
+            <div class="serv-item" data-img="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=800">
+                <span class="serv-item-num">03</span>
+                <h3>Aerial Operations</h3>
+                <p>Full-frame heavy-lift drone cinematography with precision FPV capabilities. From altitude to centimeters.</p>
+                <div class="serv-tags"><span class="stag">DJI Inspire 3</span><span class="stag">FPV</span><span class="stag">8K</span></div>
+            </div>
+            <div class="serv-item" data-img="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800">
+                <span class="serv-item-num">04</span>
+                <h3>Event Coverage</h3>
+                <p>Multi-camera live events, concerts, and corporate experiences documented with cinematic intention.</p>
+                <div class="serv-tags"><span class="stag">Multi-Cam</span><span class="stag">Live</span><span class="stag">Broadcast</span></div>
+            </div>
+            <div class="serv-item" data-img="https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=800">
+                <span class="serv-item-num">05</span>
+                <h3>Editorial & Still</h3>
+                <p>Fashion, portraiture, and editorial photography crafted with the same devotion we give to motion.</p>
+                <div class="serv-tags"><span class="stag">Fashion</span><span class="stag">Portrait</span><span class="stag">Editorial</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 6. SHOWREEL ===== -->
+<section class="reel-section">
+    <div class="reel-bg-img"></div>
+    <div class="reel-overlay"></div>
+    <div class="reel-content">
+        <div class="play-ring mag-btn" id="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <h2>Watch the <em style="font-style:italic; color:var(--gold2)">2024 Reel</em></h2>
+        <p>3 Minutes · 4K · No Compromises</p>
+    </div>
+</section>
+
+<!-- ===== 7. WORK GRID ===== -->
+<section class="work-section" id="work">
+    <span class="sec-tag">Portfolio</span>
+    <h2 class="stitle reveal">Selected<br><em>Works</em></h2>
+    <div class="work-grid">
+        <div class="wg-item">
+            <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=900" alt="Wedding Film">
+            <div class="wg-info"><h4>Ayasha × Dawit</h4><span>Wedding Film · 2024</span></div>
+        </div>
+        <div class="wg-item">
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=900" alt="Editorial">
+            <div class="wg-info"><h4>Vogue Africa</h4><span>Editorial · 2024</span></div>
+        </div>
+        <div class="wg-item">
+            <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=900" alt="Portrait">
+            <div class="wg-info"><h4>Light Sessions</h4><span>Portrait Study · 2023</span></div>
+        </div>
+        <div class="wg-item">
+            <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?q=80&w=900" alt="TVC">
+            <div class="wg-info"><h4>Ethio Telecom TVC</h4><span>Commercial · 2023</span></div>
+        </div>
+        <div class="wg-item">
+            <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=900" alt="Street">
+            <div class="wg-info"><h4>Addis Stories</h4><span>Documentary · 2023</span></div>
+        </div>
+        <div class="wg-item">
+            <img src="https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?q=80&w=900" alt="Music Video">
+            <div class="wg-info"><h4>Buruk — Dawit Tsige</h4><span>Music Video · 2024</span></div>
+        </div>
+        <div class="wg-item">
+            <img src="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&w=900" alt="Aerial">
+            <div class="wg-info"><h4>Aerial Ethiopia</h4><span>Drone Reel · 2024</span></div>
+        </div>
+        <div class="wg-item">
+            <img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=900" alt="Fashion">
+            <div class="wg-info"><h4>Sheba Fashion Week</h4><span>Fashion Film · 2023</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 8. PROCESS ===== -->
+<section class="process">
+    <span class="sec-tag">Methodology</span>
+    <h2 class="stitle reveal">Our <em>Process</em></h2>
+    <div class="process-grid">
+        <div class="proc-step reveal">
+            <div class="proc-num">01</div>
+            <h3>Discovery</h3>
+            <p>We immerse ourselves in your world. Brand, audience, story — we find the emotional core before a camera is touched.</p>
+        </div>
+        <div class="proc-step reveal">
+            <div class="proc-num">02</div>
+            <h3>Pre-Production</h3>
+            <p>Full creative deck, location scouts, cast direction, storyboarding, and technical prep. We arrive ready.</p>
+        </div>
+        <div class="proc-step reveal">
+            <div class="proc-num">03</div>
+            <h3>Production</h3>
+            <p>On set with the finest cinema glass, precision lighting, and a crew that moves like a single organism.</p>
+        </div>
+        <div class="proc-step reveal">
+            <div class="proc-num">04</div>
+            <h3>Delivery</h3>
+            <p>Color grading, sound design, VFX, and master exports. Every pixel reviewed before it leaves our hands.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 9. TEAM ===== -->
+<section class="team" id="team">
+    <span class="sec-tag">The Creatives</span>
+    <h2 class="stitle reveal">Minds<br><em>Behind</em> the Lens</h2>
+    <div class="team-grid">
+        <div class="team-card reveal">
+            <div class="team-img">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800" alt="Johnny">
+            </div>
+            <div class="team-overlay"></div>
+            <div class="team-info">
+                <span class="team-role">Founder · Director</span>
+                <h3 class="team-name">Johnny Tesfaye</h3>
+                <p class="team-bio">With 15 years behind the lens, Johnny's eye transforms ordinary scenes into extraordinary narratives.</p>
+                <div class="team-social">
+                    <a href="#">Instagram</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Vimeo</a>
+                </div>
+            </div>
+        </div>
+        <div class="team-card reveal">
+            <div class="team-img">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800" alt="Sara">
+            </div>
+            <div class="team-overlay"></div>
+            <div class="team-info">
+                <span class="team-role">Creative Director</span>
+                <h3 class="team-name">Sara Mengistu</h3>
+                <p class="team-bio">Concept architect and visual strategist. Sara turns briefs into unforgettable visual worlds.</p>
+                <div class="team-social">
+                    <a href="#">Instagram</a>
+                    <a href="#">Behance</a>
+                </div>
+            </div>
+        </div>
+        <div class="team-card reveal">
+            <div class="team-img">
+                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800" alt="Abel">
+            </div>
+            <div class="team-overlay"></div>
+            <div class="team-info">
+                <span class="team-role">Chief Colorist</span>
+                <h3 class="team-name">Abel Girma</h3>
+                <p class="team-bio">DaVinci Resolve master. Abel's grade elevates footage from shot to cinematic gold.</p>
+                <div class="team-social">
+                    <a href="#">Instagram</a>
+                    <a href="#">Vimeo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 10. TESTIMONIALS ===== -->
+<section class="testimonials">
+    <span class="sec-tag">Testimonials</span>
+    <h2 class="stitle reveal">What our<br><em>clients</em> say</h2>
+    <div class="testi-slider">
+        <div class="testi-track" id="testi-track">
+            <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">"Johnny Production transformed our brand completely. The TVC they produced was on a level I've only seen from agencies in London and New York. Ethiopia has a world-class studio."</p>
+                <div class="testi-author">
+                    <div class="testi-avatar"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200" alt=""></div>
+                    <div class="testi-meta">
+                        <strong>Amir Tadesse</strong>
+                        <span>CEO · Habesha Breweries</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">"The music video they shot for my album broke every record in streaming. People couldn't believe it was shot in Addis. Johnny's vision is simply unmatched."</p>
+                <div class="testi-author">
+                    <div class="testi-avatar"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=200" alt=""></div>
+                    <div class="testi-meta">
+                        <strong>Dawit Tsige</strong>
+                        <span>Recording Artist</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">"Professional, visionary, relentless. Our fashion film was selected for three international festivals. We won't work with anyone else."</p>
+                <div class="testi-author">
+                    <div class="testi-avatar"><img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=80&w=200" alt=""></div>
+                    <div class="testi-meta">
+                        <strong>Hana Legesse</strong>
+                        <span>Director · Sheba Fashion Week</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="testi-nav">
+            <button class="testi-btn" id="testi-prev">←</button>
+            <button class="testi-btn" id="testi-next">→</button>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 11. CLIENTS ===== -->
+<section class="clients-section">
+    <p class="clients-title">Trusted By</p>
+    <div class="clients-logos">
+        <span class="cl-logo">ETHIO TELECOM</span>
+        <span class="cl-logo">HABESHA</span>
+        <span class="cl-logo">DASHEN BANK</span>
+        <span class="cl-logo">ADDIS ABABA FC</span>
+        <span class="cl-logo">CBEETHIOPIA</span>
+        <span class="cl-logo">NILE TV</span>
+        <span class="cl-logo">ZEMEN BANK</span>
+    </div>
+</section>
+
+<!-- ===== 12. TECH ARSENAL ===== -->
+<section class="tech">
+    <span class="sec-tag">Arsenal</span>
+    <h2 class="stitle reveal">Cinema <em>Tech</em></h2>
+    <div class="tech-grid">
+        <div class="tech-cell reveal">
+            <span class="tech-icon">SENSOR</span>
+            <h4>RED V-RAPTOR</h4>
+            <p>8K VV Dynamic Sensor with 17+ stops of dynamic range. The weapon of choice for feature-level work.</p>
+            <div class="tech-spec"><span class="ts">8K</span><span class="ts">17+ STOPS</span><span class="ts">VV SENSOR</span></div>
+        </div>
+        <div class="tech-cell reveal">
+            <span class="tech-icon">CAMERA</span>
+            <h4>ARRI ALEXA Mini LF</h4>
+            <p>The gold standard. Trusted by every major Hollywood production. Science-backed skin tones, unmatched latitude.</p>
+            <div class="tech-spec"><span class="ts">Large Format</span><span class="ts">ProRes 4.5K</span><span class="ts">ARRIRAW</span></div>
+        </div>
+        <div class="tech-cell reveal">
+            <span class="tech-icon">AERIAL</span>
+            <h4>DJI INSPIRE 3</h4>
+            <p>Full-frame aerial cinematography. We pair it with Zenmuse X9-8K for cinema-grade drone shots at altitude.</p>
+            <div class="tech-spec"><span class="ts">Full-Frame</span><span class="ts">8K Zenmuse</span><span class="ts">FPV Ready</span></div>
+        </div>
+        <div class="tech-cell reveal">
+            <span class="tech-icon">OPTICS</span>
+            <h4>Cooke S7/i Lenses</h4>
+            <p>The legendary Cooke Look — organic, beautiful, full-format glass that adds character no digital sharpness can replicate.</p>
+            <div class="tech-spec"><span class="ts">T2.0</span><span class="ts">Full Frame</span><span class="ts">i/Technology</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 13. AWARDS ===== -->
+<section class="awards">
+    <span class="sec-tag">Recognition</span>
+    <h2 class="stitle reveal">Awards &<br><em>Acclaim</em></h2>
+    <div class="awards-grid">
+        <div class="award-card reveal">
+            <div class="award-year">2024</div>
+            <div class="award-badge">🏆</div>
+            <h4>Best Cinematography</h4>
+            <span>Africa Movie Academy Awards</span>
+        </div>
+        <div class="award-card reveal">
+            <div class="award-year">2024</div>
+            <div class="award-badge">🎬</div>
+            <h4>Cannes Lions Shortlist</h4>
+            <span>Film Craft — Direction</span>
+        </div>
+        <div class="award-card reveal">
+            <div class="award-year">2023</div>
+            <div class="award-badge">⭐</div>
+            <h4>Best Commercial</h4>
+            <span>Africa Film Festival — Lagos</span>
+        </div>
+        <div class="award-card reveal">
+            <div class="award-year">2023</div>
+            <div class="award-badge">🎭</div>
+            <h4>Excellence in Music Video</h4>
+            <span>Ethiopian Music Awards</span>
+        </div>
+        <div class="award-card reveal">
+            <div class="award-year">2022</div>
+            <div class="award-badge">🥇</div>
+            <h4>Best Documentary Short</h4>
+            <span>Zanzibar Film Festival</span>
+        </div>
+        <div class="award-card reveal">
+            <div class="award-year">2022</div>
+            <div class="award-badge">💎</div>
+            <h4>Audience Choice Award</h4>
+            <span>Nairobi Film Week</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 14. FAQ ===== -->
+<section class="faq">
+    <div class="faq-inner">
+        <div class="faq-left">
+            <span class="sec-tag">Inquiries</span>
+            <h2 class="stitle">Common<br><em>Questions</em></h2>
+            <div class="big-num">?</div>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-q">What is your standard turnaround time? <span class="faq-plus">+</span></div>
+                <div class="faq-a"><p style="padding:20px 0">Typical delivery for commercial projects is 14–21 business days from wrap. Premium rush delivery in 7 days is available at a surcharge. We never compromise quality for speed.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">Do you work internationally? <span class="faq-plus">+</span></div>
+                <div class="faq-a"><p style="padding:20px 0">Absolutely. We maintain offices in Addis Ababa, Dubai, and Los Angeles. We've produced work across East Africa, the Middle East, and Europe. We travel fully equipped.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">What's included in a production package? <span class="faq-plus">+</span></div>
+                <div class="faq-a"><p style="padding:20px 0">All packages include concept development, pre-production, full production crew and equipment, and post-production (color, sound, VFX as needed). We operate as a complete in-house studio.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">How do I initiate a project? <span class="faq-plus">+</span></div>
+                <div class="faq-a"><p style="padding:20px 0">Fill in the form below or email us directly. We'll schedule a discovery call within 48 hours. Most projects begin with a free 30-minute creative consultation.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">Do you offer licensing for stock footage? <span class="faq-plus">+</span></div>
+                <div class="faq-a"><p style="padding:20px 0">Yes. Our Ethiopia and East Africa aerial library is available for licensing. Contact us with your specific requirements and intended use case.</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 15. CONTACT ===== -->
+<section class="contact" id="contact">
+    <div class="contact-inner">
+        <div class="contact-info">
+            <span class="sec-tag">Begin</span>
+            <h2 class="stitle reveal">Start<br><em>Production</em></h2>
+            <p>Every great film starts with a conversation. Tell us your vision — no matter how ambitious — and we'll show you how to make it real.</p>
+            <div class="contact-detail">
+                <div class="cd-item">
+                    <span class="cd-label">Email</span>
+                    <span class="cd-val">hello@johnnyproduction.et</span>
+                </div>
+                <div class="cd-item">
+                    <span class="cd-label">Phone</span>
+                    <span class="cd-val">+251 911 000 000</span>
+                </div>
+                <div class="cd-item">
+                    <span class="cd-label">Studio</span>
+                    <span class="cd-val">Bole, Addis Ababa · Ethiopia</span>
+                </div>
+            </div>
+        </div>
+        <div class="contact-form reveal">
+            <div class="form-row">
+                <div class="form-field">
+                    <label>Your Name</label>
+                    <input type="text" placeholder="Dawit Tesfaye">
+                </div>
+                <div class="form-field">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="hello@brand.com">
+                </div>
+            </div>
+            <div class="form-field">
+                <label>Project Type</label>
+                <select>
+                    <option value="">Select a service</option>
+                    <option>High-End TVC</option>
+                    <option>Music Video</option>
+                    <option>Aerial Cinematography</option>
+                    <option>Event Coverage</option>
+                    <option>Editorial & Photography</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label>Budget Range</label>
+                <select>
+                    <option value="">Select budget</option>
+                    <option>$5,000 – $15,000</option>
+                    <option>$15,000 – $50,000</option>
+                    <option>$50,000 – $100,000</option>
+                    <option>$100,000+</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label>Project Vision</label>
+                <textarea placeholder="Tell us about your project, timeline, and creative ambitions..."></textarea>
+            </div>
+            <button class="form-submit mag-btn">Begin Production →</button>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="footer-top">
+        <div class="footer-brand">
+            <span class="f-logo">JOHNNY PROD.</span>
+            <p>Ethiopia's premium cinema and production house. We bring the $100M standard to every frame, every story, every brand.</p>
+        </div>
+        <div class="footer-col">
+            <h5>Services</h5>
+            <ul>
+                <li><a href="#">TVC & Commercial</a></li>
+                <li><a href="#">Music Videos</a></li>
+                <li><a href="#">Aerial Ops</a></li>
+                <li><a href="#">Event Coverage</a></li>
+                <li><a href="#">Editorial</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h5>Studio</h5>
+            <ul>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Our Team</a></li>
+                <li><a href="#">Awards</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Press Kit</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h5>Contact</h5>
+            <ul>
+                <li><a href="#">Addis Ababa Studio</a></li>
+                <li><a href="#">Dubai Office</a></li>
+                <li><a href="#">Los Angeles</a></li>
+                <li><a href="#">hello@johnnyproduction.et</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span class="footer-copy">© 2025 Johnny Production · All Rights Reserved</span>
+        <div class="footer-socials">
+            <a href="#">Instagram</a>
+            <a href="#">YouTube</a>
+            <a href="#">Vimeo</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">TikTok</a>
+        </div>
+    </div>
+</footer>
+
+</main>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ===================== PRELOADER ===================== */
+const preloader = document.getElementById('preloader');
+const preBar = document.getElementById('pre-bar');
+const preNum = document.getElementById('pre-num');
+const preLogo = document.querySelector('.pre-logo');
+
+let progress = 0;
+const preloadTl = gsap.timeline();
+
+preloadTl.to(preLogo, { opacity: 1, scale: 1, duration: 0.8, ease: "power3.out" });
+
+const counter = setInterval(() => {
+    progress += Math.random() * 12 + 3;
+    if (progress >= 100) { progress = 100; clearInterval(counter); launchSite(); }
+    preBar.style.width = progress + '%';
+    preNum.textContent = Math.floor(progress) + '%';
+}, 80);
+
+function launchSite() {
+    gsap.timeline()
+        .to(preBar, { width: '100%', duration: 0.3 })
+        .to(preloader, {
+            yPercent: -105, duration: 1.2, ease: "expo.inOut",
+            onComplete: () => { preloader.style.display = 'none'; animateHero(); }
+        });
+}
+
+/* ===================== HERO ANIMATION ===================== */
+function animateHero() {
+    const hInners = document.querySelectorAll('.h-inner');
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+    tl.to(hInners, { y: 0, duration: 1.4, stagger: 0.1 })
+      .to('#hero-eyebrow', { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+      .to('.hero-sub', { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+      .to('.hero-ctas', { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
+      .to('.hero-scroll', { opacity: 1, duration: 0.6 }, "-=0.4");
+}
+
+/* ===================== SMOOTH SCROLL (LENIS) ===================== */
+const lenis = new Lenis({ duration: 1.4, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+requestAnimationFrame(raf);
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+gsap.ticker.lagSmoothing(0);
+
+/* ===================== CUSTOM CURSOR ===================== */
+const cur = document.getElementById('jp-cursor');
+const dot = cur.querySelector('.c-dot');
+const ring = cur.querySelector('.c-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function moveCursor() {
+    rx += (mx - rx) * 0.18;
+    ry += (my - ry) * 0.18;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(moveCursor);
+})();
+
+/* ===================== MAGNETIC BUTTONS ===================== */
+document.querySelectorAll('.mag-btn').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        gsap.to(btn, { x: x * 0.25, y: y * 0.25, duration: 0.4, ease: "power2.out" });
+    });
+    btn.addEventListener('mouseleave', () => {
+        gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1.2, 0.5)" });
+    });
+});
+
+/* ===================== NAV SCROLL ===================== */
+ScrollTrigger.create({
+    start: "top -80px", end: 99999,
+    toggleClass: { className: "scrolled", targets: "#nav" }
+});
+
+/* ===================== PARALLAX (PHIL IMAGE) ===================== */
+gsap.to(".phil-img-inner img", {
+    y: "15%",
+    scrollTrigger: { trigger: ".philosophy", start: "top bottom", end: "bottom top", scrub: 1 }
+});
+
+/* ===================== COUNTERS ===================== */
+document.querySelectorAll('[data-count]').forEach(el => {
+    const val = +el.dataset.count;
+    ScrollTrigger.create({
+        trigger: el,
+        start: "top 88%",
+        onEnter: () => {
+            gsap.to({ n: 0 }, {
+                n: val, duration: 2.2, ease: "power2.out",
+                onUpdate: function() { el.textContent = Math.round(this.targets()[0].n) + '+'; }
+            });
+        }
+    });
+});
+
+/* ===================== SCROLL REVEALS ===================== */
+gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.fromTo(el,
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: "expo.out",
+          scrollTrigger: { trigger: el, start: "top 88%", once: true } }
+    );
+});
+
+/* ===================== SERVICE HOVER — IMAGE SWAP ===================== */
+const servImg = document.getElementById('serv-img');
+document.querySelectorAll('.serv-item').forEach(item => {
+    item.addEventListener('mouseenter', () => {
+        const src = item.dataset.img;
+        if (src && servImg) {
+            gsap.to(servImg, { opacity: 0, duration: 0.2, onComplete: () => {
+                servImg.src = src;
+                gsap.to(servImg, { opacity: 0.75, duration: 0.4 });
+            }});
+        }
+    });
+});
+
+/* ===================== WORK GRID STAGGER ===================== */
+gsap.from('.wg-item', {
+    y: 80, opacity: 0, stagger: 0.08, duration: 1,
+    scrollTrigger: { trigger: '.work-grid', start: 'top 85%', once: true }
+});
+
+/* ===================== TECH CELL MOUSE GLOW ===================== */
+document.querySelectorAll('.tech-cell').forEach(cell => {
+    cell.addEventListener('mousemove', e => {
+        const r = cell.getBoundingClientRect();
+        cell.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+        cell.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+});
+
+/* ===================== TESTIMONIAL SLIDER ===================== */
+const track = document.getElementById('testi-track');
+let tIdx = 0;
+const cards = track.querySelectorAll('.testi-card');
+function slideTo(i) {
+    tIdx = (i + cards.length) % cards.length;
+    gsap.to(track, { x: -(tIdx * (cards[0].offsetWidth + 40)), duration: 0.9, ease: "expo.out" });
+}
+document.getElementById('testi-next').addEventListener('click', () => slideTo(tIdx + 1));
+document.getElementById('testi-prev').addEventListener('click', () => slideTo(tIdx - 1));
+setInterval(() => slideTo(tIdx + 1), 5000);
+
+/* ===================== FAQ ACCORDION ===================== */
+document.querySelectorAll('.faq-item').forEach(item => {
+    const q = item.querySelector('.faq-q');
+    const a = item.querySelector('.faq-a');
+    q.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(o => {
+            o.classList.remove('open');
+            gsap.to(o.querySelector('.faq-a'), { height: 0, opacity: 0, duration: 0.4, ease: "power2.in" });
+        });
+        if (!isOpen) {
+            item.classList.add('open');
+            gsap.to(a, { height: 'auto', opacity: 1, duration: 0.6, ease: "expo.out" });
+        }
+    });
+});
+
+/* ===================== IMAGE MODAL ===================== */
+const modal = document.getElementById('modal');
+const modalImg = document.getElementById('modal-img');
+document.querySelectorAll('.wg-item img, .bento-item img, .marquee-img img').forEach(img => {
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', () => {
+        modalImg.src = img.src;
+        modal.classList.add('active');
+        gsap.fromTo(modalImg, { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "expo.out" });
+        lenis.stop();
+    });
+});
+document.getElementById('modal-close').addEventListener('click', () => {
+    gsap.to(modalImg, { scale: 0.9, opacity: 0, duration: 0.3, onComplete: () => {
+        modal.classList.remove('active'); lenis.start();
+    }});
+});
+modal.addEventListener('click', e => {
+    if (e.target === modal) document.getElementById('modal-close').click();
+});
+
+/* ===================== AWARDS STAGGER ===================== */
+gsap.from('.award-card', {
+    y: 50, opacity: 0, stagger: 0.1, duration: 0.9,
+    scrollTrigger: { trigger: '.awards-grid', start: 'top 85%', once: true }
+});
+
+/* ===================== REEL BUTTON PULSE ===================== */
+gsap.fromTo('#play-btn',
+    { scale: 0.9 }, { scale: 1.05, duration: 1.5, yoyo: true, repeat: -1, ease: "sine.inOut" }
+);
+
+/* ===================== PROCESS STEP REVEAL ===================== */
+gsap.from('.proc-step', {
+    x: -40, opacity: 0, stagger: 0.15, duration: 1.1, ease: "expo.out",
+    scrollTrigger: { trigger: '.process-grid', start: 'top 80%', once: true }
+});
+
+/* ===================== TEAM CARDS ===================== */
+gsap.from('.team-card', {
+    y: 80, opacity: 0, stagger: 0.2, duration: 1.2,
+    scrollTrigger: { trigger: '.team-grid', start: 'top 85%', once: true }
+});
+
+/* ===================== GOLD SHIMMER NAV LOGO ===================== */
+gsap.to('.nav-logo', {
+    backgroundPosition: '200% center',
+    duration: 4, repeat: -1, ease: "none"
+});
+
+/* ===================== HORIZONTAL MARQUEE PAUSE ON HOVER ===================== */
+document.querySelectorAll('.marquee-row').forEach(row => {
+    row.addEventListener('mouseenter', () => row.style.animationPlayState = 'paused');
+    row.addEventListener('mouseleave', () => row.style.animationPlayState = 'running');
+});
+
+</script>
+</body>
+</html>
